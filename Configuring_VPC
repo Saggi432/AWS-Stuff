@@ -1,0 +1,57 @@
+System Operations - Lab 2: Configuring a Virtual Private Cloud with Amazon VPC - Linux - 2.5
+==================================================================================================================
+
+Using this command reference.
+
+==================================================================================================================
+
+1. Locate the section you need. Each section in this file matches a section in the lab instructions.
+
+
+2. Replace items in angle brackets - < > - with appropriate values. For example, in this command you would replace the value - <JobFlowID> - (including the brackets) with the parameter indicated in the lab instructions:
+
+   elastic-mapreduce --list <JobFlowID>.
+
+   You can also use find and replace to change bracketed parameters in bulk.
+
+3. Do NOT enable the Word Wrap feature in Windows Notepad or the text editor you use to view this file.
+
+
+
+++++2. Provision the NAT Instance++++
+
+
+==================================================================================================================
+2.2 Provision the NAT Server Instance
+==================================================================================================================
+
+2.2.6 Paste the user data script into the User data field
+
+#!/bin/sh
+echo 1 > /proc/sys/net/ipv4/ip_forward
+echo 0 > /proc/sys/net/ipv4/conf/eth0/send_redirects
+/sbin/iptables -t nat -A POSTROUTING -o eth0 -s 0.0.0.0/0 -j MASQUERADE
+/sbin/iptables-save > /etc/sysconfig/iptables
+mkdir -p /etc/sysctl.d/
+cat <<EOF > /etc/sysctl.d/nat.conf
+net.ipv4.ip_forward = 1
+net.ipv4.conf.eth0.send_redirects = 0
+EOF
+
+
+++++3. Deploy a Bastion Server++++
+
+
+==================================================================================================================
+3.2 Create the Bastion Server
+==================================================================================================================
+
+3.2.5 Paste the following script into the User data field
+
+#!/bin/sh
+yum update -y
+
+
+
+
+Â© 2016 Amazon Web Services, Inc. or its affiliates. All rights reserved.

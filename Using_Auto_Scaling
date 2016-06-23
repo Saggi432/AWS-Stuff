@@ -1,0 +1,60 @@
+System Operations - Lab 6: Using Amazon Elastic Load Balancer (Linux) - 2.5
+==================================================================================================================
+
+Using this command reference.
+
+==================================================================================================================
+
+1. Locate the section you need. Each section in this file matches a section in the lab instructions.
+
+
+2. Replace items in angle brackets - < > - with appropriate values. For example, in this command you would replace the value - <JobFlowID> - (including the brackets) with the parameter indicated in the lab instructions:
+
+   elastic-mapreduce --list <JobFlowID>.
+
+   You can also use find and replace to change bracketed parameters in bulk.
+
+3. Do NOT enable the Word Wrap feature in Windows Notepad or the text editor you use to view this file.
+
+
+
+++++1. Create a New Amazon Machine Image++++
+
+
+==================================================================================================================
+1.4 Create New EC2 Instance
+==================================================================================================================
+
+
+1.4.1 Inspect the script UserData.txt
+
+more UserData.txt
+
+1.4.2 Create your new EC2 instance
+
+aws ec2 run-instances --key-name <key-name> --instance-type t2.micro --image-id <ami-id> --user-data file:///home/ec2-user/UserData.txt --security-group-ids <sg-id> --subnet-id <subnet-id> --associate-public-ip-address
+
+1.4.3 Monitor the instance status
+
+aws ec2 describe-instance-status --instance-id <new-instance-id>
+
+1.4.4 Obtain public DNS name of new Web server
+
+aws ec2 describe-instances --instance-id <new-instance-id> --query 'Reservations[0].Instances[0].NetworkInterfaces[0].Association.PublicDnsName'
+
+1.4.5 Test Web server using curl command
+
+curl http://<public-dns-address>/ec2-stress/index.php
+
+==================================================================================================================
+1.5 Create a Custom AMI
+==================================================================================================================
+
+
+1.5.1 Create a new AMI based on the new instance
+
+aws ec2 create-image --name WebServer --instance-id <new-instance-id>
+
+
+
+Â© 2016 Amazon Web Services, Inc. or its affiliates. All rights reserved.

@@ -1,0 +1,86 @@
+System Operations - Lab 1: Creating Elastic Compute Cloud (Amazon EC2) Instances (Linux) - 2.5
+==================================================================================================================
+
+Using this command reference.
+
+==================================================================================================================
+
+1. Locate the section you need. Each section in this file matches a section in the lab instructions.
+
+
+2. Replace items in angle brackets - < > - with appropriate values. For example, in this command you would replace the value - <JobFlowID> - (including the brackets) with the parameter indicated in the lab instructions:
+
+   elastic-mapreduce --list <JobFlowID>.
+
+   You can also use find and replace to change bracketed parameters in bulk.
+
+3. Do NOT enable the Word Wrap feature in Windows Notepad or the text editor you use to view this file.
+
+
+
+++++1. Creating Instances++++
+
+
+==================================================================================================================
+1.2 Create Command Host
+==================================================================================================================
+
+1.2.8 Paste text into user data textbox
+
+#!/bin/bash
+yum update -y
+
+==================================================================================================================
+1.6 Create Web Server
+==================================================================================================================
+
+1.6.1 Save user data
+
+wget https://d2lrzjb0vjvpn5.cloudfront.net/sys-ops/v2.5/lab-1-compute-linux/static/UserData.txt
+
+1.6.2 Run command to create Web server instance
+
+aws ec2 run-instances --image-id <ami-id> --user-data file:///home/ec2-user/UserData.txt --key-name <key-name> --security-group-ids <sg-id> --instance-type t2.micro --subnet-id <subnet-id> --associate-public-ip-address --query 'Instances[*].InstanceId'
+
+1.6.3 Assign Name tag to instance
+
+aws ec2 create-tags --resources <instance_id> --tags 'Key=Name,Value=WebServer'
+
+1.6.4 Verify instance created successfully
+
+aws ec2 describe-instances --instance-ids <instance_id>
+
+1.6.5 See the value of just the State field
+
+aws ec2 describe-instances --instance-ids <instance_id> --query   'Reservations[0].Instances[0].State.Name'
+
+
+==================================================================================================================
+1.7 Verify Your Web Server
+==================================================================================================================
+
+1.7.1 Query the value of the PublicDnsName of your instance
+
+aws ec2 describe-instances --instance-ids <instance_id> --query 'Reservations[0].Instances[0].PublicDnsName'
+
+
+++++2. Challenge Solutions - Fixing the Web Server Installation++++
+
+==================================================================================================================
+2.2 Fixing the Web Server Installation
+==================================================================================================================
+
+2.2.1 Check the status of your HTTP server
+
+service httpd status
+
+2.2.2 Examine the user data supplied to this instance
+
+curl http://169.254.169.254/latest/user-data
+
+2.2.4 Start your Web server manually
+
+sudo service httpd start
+
+
+© 2016 Amazon Web Services, Inc. or its affiliates. All rights reserved.

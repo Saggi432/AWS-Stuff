@@ -1,0 +1,91 @@
+System Operations - Lab 7: Automating Deployments with CloudFormation - 2.5
+==================================================================================================================
+
+Using this command reference.
+
+==================================================================================================================
+
+1. Locate the section you need. Each section in this file matches a section in the lab instructions.
+
+
+2. Replace items in angle brackets - < > - with appropriate values. For example, in this command you would replace the value - <JobFlowID> - (including the brackets) with the parameter indicated in the lab instructions:
+
+   elastic-mapreduce --list <JobFlowID>.
+
+   You can also use find and replace to change bracketed parameters in bulk.
+
+3. Do NOT enable the Word Wrap feature in Windows Notepad or the text editor you use to view this file.
+
+
+++++1. Change and Run the AWS CloudFormation Template ++++
+
+==================================================================================================================
+1.1 Add AMI ID Lookup to Template
+==================================================================================================================
+1.1.1 https://d2lrzjb0vjvpn5.cloudfront.net/sys-ops/v2.5/lab-7-automating/static/Lab-7-Start-CF.template
+
+1.1.4 Copy the new ImageId property code from the command reference file
+
+        {
+          "Fn::FindInMap" : [
+            "AmazonLinuxAMI", {
+              "Ref" : "AWS::Region"
+            },
+            "AMI"
+          ]
+        }
+
+==================================================================================================================
+1.2 Run the Template
+==================================================================================================================
+1.2.7 https://d2lrzjb0vjvpn5.cloudfront.net/sys-ops/v2.5/lab-7-automating/static/Lab-7-Completed-CF.template		
+
+		
+++++2. Update Stack with New Template ++++
+
+==================================================================================================================
+2.1 Add InstanceType Parameter to Template
+==================================================================================================================
+
+2.1.1 Copy the BastionInstanceType parameter
+
+,
+		"BastionInstanceType" : {
+			"Type" : "String",
+			"Description" : "The size of the instance to use for the bastion host."
+		}
+
+2.1.4		Copy the Ref parameter
+
+{
+	"Ref" : "BastionInstanceType"
+}
+
+++++3. Challenge Solution: Debugging a CloudFormation Template++++
+
+==================================================================================================================
+3 Challenge Overview
+==================================================================================================================
+
+URL to download the debug template
+
+https://us-west-2-aws-training.s3.amazonaws.com/awsu-ilt/sys-ops/v2.5/lab-7-automating/static/CFDebug.template
+
+
+==================================================================================================================
+3.2 Fixing the Resource Error
+==================================================================================================================
+
+3.2.4 Replace the ImageId parameter
+
+		"ImageId" : {
+      "Fn::FindInMap" : [
+        "AmazonLinuxAMI", {
+          "Ref" : "AWS::Region"
+        },
+        "AMI"
+      ]
+    }
+
+
+© 2016 Amazon Web Services, Inc. or its affiliates. All rights reserved.
